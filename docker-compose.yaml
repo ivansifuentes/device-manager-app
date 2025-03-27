@@ -1,0 +1,75 @@
+services:
+  react_native_app:
+    build: ./expo-app
+    container_name: expo_service
+    environment:
+      - NODE_ENV=development
+    tty: true
+    ports:
+      - '19006:19006'
+      - '19001:19001'
+      - '19002:19002'
+      - '8081:8081'
+    networks:
+      - dm-network
+    healthcheck:
+      disable: true
+  # account-service:
+  #   build: ./account-service
+  #   container_name: account_service
+  #   ports:
+  #     - '4001:4001'
+  #   networks:
+  #     - dm-network
+  #   stdin_open: true
+  #   tty: true
+  # device-service:
+  #   build: ./device-service
+  #   container_name: device_service
+  #   ports:
+  #     - '4002:4002'
+  #   networks:
+  #     - dm-network
+  #   stdin_open: true
+  #   tty: true
+  apollo-router:
+    build: ./router
+    container_name: router_service
+    ports:
+      - "4000:4000"
+    networks:
+      - dm-network
+    environment:
+      APOLLO_GRAPH_REF: "Xplora-hif2rs@current"
+      APOLLO_KEY: "service:Xplora-hif2rs:L8xcN38ULJ4rRu1SSFtGPg"
+      APOLLO_ROUTER_CONFIG_PATH: /gateway/config/router.yaml
+      APOLLO_ROUTER_LOG: debug
+    volumes:
+      - ./router/router.yaml:/gateway/config/router.yaml
+  flyway:
+    image: flyway/flyway:6.3.1
+    command: -configFiles=/flyway/conf/flyway.config -locations=filesystem:/flyway/sql -connectRetries=60 migrate
+    volumes:
+      - ${PWD}/migrations:/flyway/sql
+      - ${PWD}/docker-flyway.config:/flyway/conf/flyway.config
+    depends_on:
+      - postgres
+    networks:
+      - dm-network
+  postgres:
+    image: postgres:12.2-alpine
+    restart: always
+    ports:
+    - "5432:5432"
+    networks:
+      - dm-network
+    environment:
+    - POSTGRES_USER=tea-fetcher
+    - POSTGRES_PASSWORD=pass
+    - POSTGRES_DB=tea-db
+networks:
+  dm-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16

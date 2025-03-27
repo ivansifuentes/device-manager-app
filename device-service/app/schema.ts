@@ -1,0 +1,33 @@
+import { gql } from "apollo-server-express";
+
+const Schema = gql`
+    extend schema
+    @link(url: "https://specs.apollo.dev/federation/v2.7",
+            import: ["@key"])
+
+    type Device {
+        id: ID!
+        serial_number: String!
+        model: String!
+    }
+
+    type Account @key(fields: "id") {
+        id: ID!
+        accountDevices: [Device]!
+    }
+
+    input CreateDeviceInput {
+        serial_number: String!
+        model: String!
+    }
+
+    type Query {
+        device(id: ID!): Device
+    }
+
+    type Mutation {
+        createDevice(input: CreateDeviceInput!, accountId: ID): Device
+    }
+`;
+
+export default Schema; 
