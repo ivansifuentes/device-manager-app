@@ -14,24 +14,24 @@ services:
       - dm-network
     healthcheck:
       disable: true
-  # account-service:
-  #   build: ./account-service
-  #   container_name: account_service
-  #   ports:
-  #     - '4001:4001'
-  #   networks:
-  #     - dm-network
-  #   stdin_open: true
-  #   tty: true
-  # device-service:
-  #   build: ./device-service
-  #   container_name: device_service
-  #   ports:
-  #     - '4002:4002'
-  #   networks:
-  #     - dm-network
-  #   stdin_open: true
-  #   tty: true
+  account-service:
+    build: ./account-service
+    container_name: account_service
+    ports:
+      - '4001:4001'
+    networks:
+      - dm-network
+    stdin_open: true
+    tty: true
+  device-service:
+    build: ./device-service
+    container_name: device_service
+    ports:
+      - '4002:4002'
+    networks:
+      - dm-network
+    stdin_open: true
+    tty: true
   apollo-router:
     build: ./router
     container_name: router_service
