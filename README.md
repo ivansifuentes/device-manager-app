@@ -62,6 +62,8 @@ Using a tool like Insomnia is possible to send a request like this:
 <img width="1142" alt="Screenshot 2025-03-27 at 5 20 50 p m" src="https://github.com/user-attachments/assets/f80b6e0a-a48e-498a-8a5c-ba20027ad524" />
 
 
+Note: *Credentials are hard-coded because this is a proof of concept app, on a real world scenario we should store these on Secrets Manager or similar*
+
 
 
 
