@@ -72,7 +72,6 @@ const Resolvers = {
   },
   Account: {
     async accountDevices(account: Account, _2: any, context: Context) {
-      console.log({account});
       return await context.dbPool('device')
         .join('account_device', 'device.id', 'account_device.device_id')
         .where('account_id', account.id);

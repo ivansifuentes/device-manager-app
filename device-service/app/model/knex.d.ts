@@ -1,4 +1,4 @@
-import { Device } from '../types';
+import { Device } from './Device';
 import { AccountDevice } from './AccountDevice';
 
 declare module 'knex/types/tables' {
