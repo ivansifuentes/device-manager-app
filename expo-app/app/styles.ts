@@ -53,6 +53,9 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  buttonview: {
+    marginTop: 20,
+  },
   button: {
     fontSize: 20,
     textDecorationLine: 'underline',

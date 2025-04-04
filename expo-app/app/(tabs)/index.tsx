@@ -1,6 +1,6 @@
-import { Text, View, StyleSheet, FlatList, Pressable, GestureResponderEvent } from 'react-native';
+import { Text, View, FlatList, Pressable } from 'react-native';
 import { gql, useQuery } from '@apollo/client';
-import React from 'react';
+import React, { useState } from 'react';
 import AppLoading from 'expo-app-loading';
 import styles from '../styles';
 import { Account } from '@/models/Account';
@@ -24,21 +24,32 @@ const ACCOUNTS_QUERY = gql`
 
 type AccountItemProps = {
   account: Account;
-  onPress: (event: GestureResponderEvent) => void;
 }
 
 const AccountItem = (props: AccountItemProps) => {
   const { name, accountDevices } = props.account;
+  const [expanded, setExpanded] = useState<boolean>(false);
 
   return (
-    <Pressable style={styles.item} onPress={props.onPress}>
+    <Pressable style={styles.item} onPress={() => setExpanded(!expanded)}>
       <Text style={styles.header}>{name}</Text>
-      {accountDevices.map((device) => (
-        <div style={styles.accountdevice}>
-          <Text style={styles.subheader}>Serial Number: {device.serial_number}</Text>
-          <Text style={styles.subheader}>Model: {device.model}</Text>
-        </div>
-      ))}
+      {expanded && (
+        <View>
+          {accountDevices.length < 1 && (
+            <div style={styles.accountdevice}>
+              <Text style={styles.subheader}>
+                [No Linked Devices]
+              </Text>
+            </div>
+          )}
+          {accountDevices.map((device) => (
+            <div key={device.id} style={styles.accountdevice}>
+              <Text style={styles.subheader}>Serial Number: {device.serial_number}</Text>
+              <Text style={styles.subheader}>Model: {device.model}</Text>
+            </div>
+          ))}
+        </View>
+      )}
     </Pressable>
   )
 }
@@ -54,7 +65,7 @@ export default function Index() {
     <FlatList
       data={data?.accounts?.items}
       renderItem={({ item }) => (
-        <AccountItem key={item.id} account={item} onPress={() => console.log({item})} />
+        <AccountItem key={item.id} account={item} />
       )}
       keyExtractor={(item) => item.id.toString()}
     />

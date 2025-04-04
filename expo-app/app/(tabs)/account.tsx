@@ -43,7 +43,7 @@ export default function AccountScreen() {
           value={name}
           placeholder=""
       />
-      <View>
+      <View style={styles.buttonview}>
         <Button title='Create Account' onPress={() => onSubmit()} />
       </View>
     </View>

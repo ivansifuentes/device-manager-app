@@ -101,7 +101,7 @@ export default function DeviceScreen() {
           setAccountId(item.value);
         }}
       />
-      <View>
+      <View style={styles.buttonview}>
         <Button title='Create Device' onPress={() => onSubmit()} />
       </View>
     </View>
