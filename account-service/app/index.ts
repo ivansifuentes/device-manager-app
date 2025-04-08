@@ -1,19 +1,24 @@
 import { ApolloServer } from "apollo-server-express";
+import fs from "fs";
+import path from "path";
+import { gql } from "apollo-server-express";
 import express from "express";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import http from "http";
 import Resolvers from "./resolver";
-import cors from 'cors';
 import { dbPool } from "./utils/db";
-import Schema from "./schema";
 import { buildSubgraphSchema } from "@apollo/subgraph";
 
+const typeDefs = fs.readFileSync(
+  path.join(__dirname, "./", "account.graphql"),
+  "utf8"
+);
 
 async function startApolloServer(resolvers: any) {
   const app = express();
   const httpServer = http.createServer(app);
   const server = new ApolloServer({
-    schema: buildSubgraphSchema({ typeDefs: Schema, resolvers }),
+    schema: buildSubgraphSchema({ typeDefs: gql`${typeDefs}`, resolvers }),
     context: async ({ req }) => {
       return { dbPool }
     },
